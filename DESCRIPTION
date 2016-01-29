@@ -1,0 +1,9 @@
+Package: meteorogram
+Type: Package
+Title: A tested R package for ploting meteograms (similarly as published @ meteo.pl)
+Version: 0.0
+Date: 2016-01-29
+Author: Bartosz Czernecki
+Maintainer: Who to complain to <bczernecki@gmail.com>
+Description: A tested R package for ploting meteograms (similarly as published @ meteo.pl)
+License: N/A
