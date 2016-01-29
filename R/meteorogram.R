@@ -1,6 +1,7 @@
 
 # creating sample datasets:
 
+<<<<<<< HEAD
 # TODO
 
 
@@ -25,3 +26,5 @@ for (i in 1:6) {
   +     plot(1, 1, type = "n")
   +     mtext(letters[i], side = 3, line = -1, adj = 0.1, cex = 0.6)
   + }
+=======
+>>>>>>> 336096e54d4805ffc0a71bbedc44e8f8ab1b390b
