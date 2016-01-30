@@ -14,8 +14,10 @@ temp2 <- jitter(sin(1:len/pi),factor = 400)*3
 
 #        left, right, bottom, top
 par(fig=c(0.10,0.90,0.70,0.90), new=F, mar = c(0, 0, 0, 0))
-plot(dates,temp, xaxt='n', xlab='', type='l', col='blue', lwd=2, ylim=c(range(c(temp,temp2))),yaxs = "i")
+plot(dates,temp, xaxt='n', xlab='', type='l', col='blue', lwd=2, ylim=c(range(c(temp,temp2))),yaxs = "i", cex.axis=0.8)
 lines(dates,temp2, type='l', col='red', lwd=1.5, yaxs = "i")
+
+polygon(x=c(dates[1]-100000,dates[1]-100000,max(dates)+10000,max(dates)+10000), y = c(-30,0,0,-30), col="#0011FF30", border=NA)
 
 abline(h=c(-20:30*2), lty=3)
 abline(v = dates[seq(1, len+2, by=3)], col="black", lty=3)
@@ -52,7 +54,7 @@ x3 <- c(min(x2), x2, max(x2))
 y3 <- c(0, y2, 0)
 
 # because polygon() is dumb and wants a pre-existing plot
-plot(x, y, ylim=c(0, max(y)+1), type="n", yaxs = "i", xaxt='n')
+plot(x, y, ylim=c(0, max(y)+1), type="n", yaxs = "i", xaxt='n',  cex.axis=0.8)
 
 polygon(x3, y3, border=NA, col="#0000FF50", yaxs = "i")
 lines(x2, y2)
