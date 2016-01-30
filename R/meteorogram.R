@@ -9,9 +9,16 @@ temp2 <- jitter(sin(1:len/pi),factor = 400)*3
 # TODO
 
 
+# merging onto data.frame and calculating simple stats
+DF <- data.frame(dates,temp2)
+DF$Date <- as.Date(DF$dates, "%m/%d/%Y")
+stats <- aggregate(temp2 ~ Date, DF, mean) 
+stats$max<- round(aggregate(temp2 ~ Date, DF, max)[,2],1)
+stats$min<- round(aggregate(temp2 ~ Date, DF, min)[,2],1)
+
+head(stats)
+
 # creating layout (similarly as presented @ meteo.pl)
-
-
 #        left, right, bottom, top
 par(fig=c(0.10,0.90,0.70,0.90), new=F, mar = c(0, 0, 0, 0))
 plot(dates,temp, xaxt='n', xlab='', type='l', col='blue', lwd=2, ylim=c(range(c(temp,temp2))),yaxs = "i", cex.axis=0.8)
@@ -24,6 +31,9 @@ abline(v = dates[seq(1, len+2, by=3)], col="black", lty=3)
 
 axis(3, at=dates[seq(1, len, by=3)], labels = format(dates[seq(1, len, by=3)],"%H"), padj = 1.5, cex.axis=0.75)
 axis(3, at=dates[seq(10, len, by=24)], labels = format(dates[seq(10, len, by=24)],"%a, %m-%d"), padj = 0, cex.axis=0.8)
+
+axis(1, at=dates[seq(10, len, by=24)], labels = paste("Tmax = ",format(stats[1:3,3]+0.5,digits = 2)), padj = -3, cex.axis=0.7, col.axis="red", tick = FALSE,lwd.ticks = 0,line = NA)
+axis(1, at=dates[seq(10, len, by=24)], labels = paste("Tmin = ",format(stats[1:3,4]-0.5,digits = 2)), padj = -2, cex.axis=0.7, col.axis="blue", tick = FALSE,lwd.ticks = 0,line = NA)
 
 
 # delimiting day and night periods and adding results as shaded polygons
@@ -61,4 +71,5 @@ lines(x2, y2)
 lines(dates,cos(temp/6), xaxt='n', xlab='', type='l', col='coral', lwd=2, ylim=c(range(c(temp,temp2))))
 abline(h=c(0,0.5,1,2,5,10), lty=3)
 abline(v = dates[seq(1, len+2, by=3)], col="black", lty=3)
+
 
