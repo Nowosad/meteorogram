@@ -43,9 +43,9 @@ abline(h=c(-20:30*5), lty=3)
 abline(v =seq(dates[1],max(dates), by="6 hour"), col="black", lty=3)
 
 
-aty <- interwal_x <- seq(1, len, by=3)
+#aty <- interwal_x <- seq(1, len, by=3)
 axis(3, at=seq(dates[1],max(dates), by="3 hour"), labels = format(seq(dates[1],max(dates), by="3 hour"),"%H"), padj = 1.5, cex.axis=0.75)
-axis(3, at=seq(dates[12],max(dates), by="24 hour"), labels = format(seq(dates[12],max(dates), by="24 hour"),"%a, %m-%d"), padj = 0, cex.axis=0.8, hadj=)
+axis(3, at=seq(dates[12],max(dates), by="24 hour"), labels = format(seq(dates[12],max(dates), by="24 hour"),"%a, %m-%d"), padj = 0, cex.axis=0.8,tick = FALSE)
 
 axis(1, at=seq(dates[12],max(dates), by="24 hour")[1:3], labels = paste("Tmax = ",format(stats[1:3,3]+0.5,digits = 2)), padj = -3, cex.axis=0.7, col.axis="red", tick = FALSE,lwd.ticks = 0,line = NA)
 axis(1, at=seq(dates[12],max(dates), by="24 hour")[1:3], labels = paste("Tmin = ",format(stats[1:3,4]-0.5,digits = 2)), padj = -2, cex.axis=0.7, col.axis="blue", tick = FALSE,lwd.ticks = 0,line = NA)
@@ -100,5 +100,5 @@ box()
 x_max <- length(dates)-1
 lines(x = seq(0,x_max+1, length.out=x_max+1) ,dataset$cisn_msl,lty=1,col="black",xaxs='i', lwd=3)
 abline(h=1:240*5, lty=3)
-abline(v =0:12*6, col="black", lty=3)
+abline(v =0:12*6.08, col="black", lty=3)
 
