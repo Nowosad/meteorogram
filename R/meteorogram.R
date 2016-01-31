@@ -1,39 +1,54 @@
 library(StreamMetabolism)
 
+
+# read sample WRF dataset
+dataset <- read.csv("http://openmeteo.pl/meta/wrf/ASCII.txt", sep=";", na.strings="-999000000.00 ")
+dataset$czas <- sub("Z"," ",as.character(dataset$czas))
+dataset$czas <- sub("JAN","-01-",as.character(dataset$czas))
+dataset$czas <- sub("FEB","-02-",as.character(dataset$czas))
+dataset$czas <- as.POSIXlt(strptime(dataset$czas, "%H %d-%m-%Y", tz="UTC"))
+
 # creating sample datasets:
 dates <- seq(ISOdatetime(2016,1,29,1,0,0, tz="UTC"), ISOdatetime(2016,2,1,0,0,0, tz="UTC"), "hours")
+dates <- dataset$czas
 len <- length(dates)
 
-temp <- sin(1:len/pi)*3
-temp2 <- jitter(sin(1:len/pi),factor = 400)*3
+temp <- dataset$temp
+temp2 <- dataset$dpt2m
 # TODO
 
 
 # merging onto data.frame and calculating simple stats
-DF <- data.frame(dates,temp2)
+DF <- data.frame(dates,temp)
 DF$Date <- as.Date(DF$dates, "%m/%d/%Y")
-stats <- aggregate(temp2 ~ Date, DF, mean) 
-stats$max<- round(aggregate(temp2 ~ Date, DF, max)[,2],1)
-stats$min<- round(aggregate(temp2 ~ Date, DF, min)[,2],1)
+stats <- aggregate(temp ~ Date, DF, mean) 
+stats$max<- round(aggregate(temp ~ Date, DF, max)[,2],1)
+stats$min<- round(aggregate(temp ~ Date, DF, min)[,2],1)
 
 head(stats)
 
 # creating layout (similarly as presented @ meteo.pl)
 #        left, right, bottom, top
 par(fig=c(0.10,0.90,0.70,0.90), new=F, mar = c(0, 0, 0, 0))
-plot(dates,temp, xaxt='n', xlab='', type='l', col='blue', lwd=2, ylim=c(range(c(temp,temp2))),yaxs = "i", cex.axis=0.8)
-lines(dates,temp2, type='l', col='red', lwd=1.5, yaxs = "i")
+ylim=round(c(range(c(temp,temp2))))
+ylim[1] <- ylim[1]-3
+ylim[2] <- ylim[2]+3
+
+plot(dates,temp, xaxt='n', xlab='', type='l', col='blue', lwd=3, ylim=ylim,xaxs = "i", cex.axis=0.8, ylab="Temperature")
+lines(dates,temp2, type='l', col='red', lwd=2, yaxs = "i")
 
 polygon(x=c(dates[1]-100000,dates[1]-100000,max(dates)+10000,max(dates)+10000), y = c(-30,0,0,-30), col="#0011FF30", border=NA)
 
-abline(h=c(-20:30*2), lty=3)
-abline(v = dates[seq(1, len+2, by=3)], col="black", lty=3)
+abline(h=c(-20:30*5), lty=3)
+abline(v =seq(dates[1],max(dates), by="6 hour"), col="black", lty=3)
 
-axis(3, at=dates[seq(1, len, by=3)], labels = format(dates[seq(1, len, by=3)],"%H"), padj = 1.5, cex.axis=0.75)
-axis(3, at=dates[seq(10, len, by=24)], labels = format(dates[seq(10, len, by=24)],"%a, %m-%d"), padj = 0, cex.axis=0.8)
 
-axis(1, at=dates[seq(10, len, by=24)], labels = paste("Tmax = ",format(stats[1:3,3]+0.5,digits = 2)), padj = -3, cex.axis=0.7, col.axis="red", tick = FALSE,lwd.ticks = 0,line = NA)
-axis(1, at=dates[seq(10, len, by=24)], labels = paste("Tmin = ",format(stats[1:3,4]-0.5,digits = 2)), padj = -2, cex.axis=0.7, col.axis="blue", tick = FALSE,lwd.ticks = 0,line = NA)
+aty <- interwal_x <- seq(1, len, by=3)
+axis(3, at=seq(dates[1],max(dates), by="3 hour"), labels = format(seq(dates[1],max(dates), by="3 hour"),"%H"), padj = 1.5, cex.axis=0.75)
+axis(3, at=seq(dates[12],max(dates), by="24 hour"), labels = format(seq(dates[12],max(dates), by="24 hour"),"%a, %m-%d"), padj = 0, cex.axis=0.8, hadj=)
+
+axis(1, at=seq(dates[12],max(dates), by="24 hour")[1:3], labels = paste("Tmax = ",format(stats[1:3,3]+0.5,digits = 2)), padj = -3, cex.axis=0.7, col.axis="red", tick = FALSE,lwd.ticks = 0,line = NA)
+axis(1, at=seq(dates[12],max(dates), by="24 hour")[1:3], labels = paste("Tmin = ",format(stats[1:3,4]-0.5,digits = 2)), padj = -2, cex.axis=0.7, col.axis="blue", tick = FALSE,lwd.ticks = 0,line = NA)
 
 
 # delimiting day and night periods and adding results as shaded polygons
@@ -45,8 +60,8 @@ for (i in 1:4) polygon(x = c(daynight$sunset[i], daynight$sunset[i], daynight$su
 
 # dodanie stopki:
 par(fig=c(0.10,0.90,0.00,1), new=TRUE, mar = c(0, 0, 0, 0))
-text(dates[50], y=-2,"(c) Zakład Klimatologii UAM (2016)", cex=0.6, pos=4)
-text(dates[50], y=-2.5,"Bartosz Czernecki & Mateusz Taszarek", cex=0.6, pos=4)
+text(max(dates), y=-2,"(c) Zakład Klimatologii UAM (2016)", cex=0.6, pos=2)
+text(max(dates), y=-2.5,"Bartosz Czernecki & Mateusz Taszarek", cex=0.6, pos=2)
 
 
 
@@ -55,7 +70,8 @@ text(dates[50], y=-2.5,"Bartosz Czernecki & Mateusz Taszarek", cex=0.6, pos=4)
 par(fig=c(0.10,0.90,0.50,0.67), new=TRUE, mar = c(0, 0, 0, 0))
 a <-sin(1:72)# wygenerowanie sztucznej serii
 x <- dates
-y <- temp/10
+y <- dataset$opad
+if(is.na(y[1])) y[1]=0
 #x <- seq_along(y)
 y2 <- rep(y, each=2)
 y2 <- y2[-length(y2)]
@@ -64,12 +80,11 @@ x3 <- c(min(x2), x2, max(x2))
 y3 <- c(0, y2, 0)
 
 # because polygon() is dumb and wants a pre-existing plot
-plot(x, y, ylim=c(0, max(y)+1), type="n", yaxs = "i", xaxt='n',  cex.axis=0.8)
+plot(x, y, ylim=c(0, max(y)+1), type="n", xaxs = "i", xaxt='n',  cex.axis=0.8)
 
-polygon(x3, y3, border=NA, col="#0000FF50", yaxs = "i")
+
+polygon(x3, y3, border=NA, col="#0000FF50", yaxs = "i", xaxs='i')
 lines(x2, y2)
-lines(dates,cos(temp/6), xaxt='n', xlab='', type='l', col='coral', lwd=2, ylim=c(range(c(temp,temp2))))
+lines(dates,dataset$dpt2m/dataset$temp, xaxt='n', xlab='', type='l', col='coral', lwd=2)
 abline(h=c(0,0.5,1,2,5,10), lty=3)
-abline(v = dates[seq(1, len+2, by=3)], col="black", lty=3)
-
-
+abline(v =seq(dates[1],max(dates), by="6 hour"), col="black", lty=3)
