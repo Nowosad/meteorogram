@@ -1,5 +1,5 @@
 library(StreamMetabolism)
-
+library(plyr)
 
 # read sample WRF dataset
 dataset <- read.csv("http://openmeteo.pl/meta/wrf/ASCII.txt", sep=";", na.strings="-999000000.00 ")
@@ -9,7 +9,7 @@ dataset$czas <- sub("FEB","-02-",as.character(dataset$czas))
 dataset$czas <- as.POSIXlt(strptime(dataset$czas, "%H %d-%m-%Y", tz="UTC"))
 
 # creating sample datasets:
-dates <- seq(ISOdatetime(2016,1,29,1,0,0, tz="UTC"), ISOdatetime(2016,2,1,0,0,0, tz="UTC"), "hours")
+#dates <- seq(ISOdatetime(2016,1,29,1,0,0, tz="UTC"), ISOdatetime(2016,2,1,0,0,0, tz="UTC"), "hours")
 dates <- dataset$czas
 len <- length(dates)
 
@@ -88,3 +88,17 @@ lines(x2, y2)
 lines(dates,dataset$dpt2m/dataset$temp, xaxt='n', xlab='', type='l', col='coral', lwd=2)
 abline(h=c(0,0.5,1,2,5,10), lty=3)
 abline(v =seq(dates[1],max(dates), by="6 hour"), col="black", lty=3)
+
+
+par(fig=c(0.10,0.90,0.30,0.47), new=TRUE, mar = c(0, 0, 0, 0))
+slp_range <- round(range(dataset$cisn_msl))
+slp_range[1] <- slp_range[1]-6
+slp_range[2] <- slp_range[2]+6
+barplot(dataset$cisn_msl, ylim=slp_range, col=add_slp_color(76),names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0)
+box()
+
+x_max <- length(dates)-1
+lines(x = seq(0,x_max+1, length.out=x_max+1) ,dataset$cisn_msl,lty=1,col="black",xaxs='i', lwd=3)
+abline(h=1:240*5, lty=3)
+abline(v =0:12*6, col="black", lty=3)
+
