@@ -103,4 +103,4 @@ abline(h=1:240*5, lty=3)
 abline(v =0:12*6.08, col="black", lty=3)
 
 
-#ala ma kota
+#ala ma kota ala ma kojota
