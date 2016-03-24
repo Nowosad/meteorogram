@@ -102,3 +102,5 @@ lines(x = seq(0,x_max+1, length.out=x_max+1) ,dataset$cisn_msl,lty=1,col="black"
 abline(h=1:240*5, lty=3)
 abline(v =0:12*6.08, col="black", lty=3)
 
+
+#ala ma kota ala ma kojota
