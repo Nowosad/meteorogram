@@ -218,7 +218,7 @@ text(p[2]+(p[2]/72)*6, mean(p[3:4]), labels = 'kierunek', xpd = NA, srt = -90, c
 # zachmurzenie
 #########################
 
-par(fig=c(0.10,0.90,0.19,0.31), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
+par(fig=c(0.10,0.90,0.21,0.33), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
 # wygenerujmy pewne ciagi danych
 niskie <- sort(round(rnorm(72,4),2))
 srednie <- sort(round(rnorm(72,3),2))
@@ -241,24 +241,12 @@ abline(v =0:72*3, col="black", lty=3)
 
 
 
-# creating layout (similarly as presented @ meteo.pl) <- testing approach
-#        left, right, bottom, top
-par(fig=c(0.05,0.50,0.10,0.2), new=T, mar = c(0, 0, 0, 0), oma=c(rep(0,4)))
-#par()$xpd 
-par(xpd = NA)
-#plot(1,1, type='n')
-box()
-mtext("ala", side=1, cex = 0.2)
-#ala ma kota ala ma kojota
-
-
-
 # dodanie stopki:
 #        left, right, bottom, top
-par(fig=c(0.10,0.90,0.13,1), new=T, mar = c(0, 0, 0, 0))
+par(fig=c(0.70,0.95,0.075,1), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
 #plot(1:100)
-mtext("(c) Zakład Klimatologii UAM (2016)",side=1, cex=0.6, padj=2)
-mtext("Bartosz Czernecki & Mateusz Taszarek", side=1,cex=0.6, padj=4)
+mtext("(c) Zakład Klimatologii UAM \nBartosz Czernecki & Mateusz Taszarek",side=1, cex=0.75, padj=2, adj = 0)
+#mtext("Bartosz Czernecki & Mateusz Taszarek", side=1,cex=0.6, padj=4)
 
 dev.off()
 
