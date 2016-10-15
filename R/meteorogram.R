@@ -81,6 +81,8 @@ axis(1, at=seq(dates[12],max(dates), by="24 hour")[1:3], labels = paste("Tmin = 
 
 par(fig=c(0.08,0.18,0.92,0.96), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
 mtext(paste0("wschód słońca: ", format(daynight[1,1],"%H:%M"), " UTC\nzachód słońca: ", format(daynight[1,2],"%H:%M"), " UTC"), cex = 0.9)
+par(fig=c(0.82,0.95,0.90,0.95), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
+mtext(("Poznań\n"), cex = 1.05, adj=0)
 
 #daynight <- sunrise.set(52.4, 16.9, format(dates[1]-60*60*24, "%Y/%m/%d"), timezone="UTC", 5)
 
@@ -195,11 +197,11 @@ text(p[2]+(p[2]/72)*6, mean(p[3:4]), labels = 'Wiatr [m/s]', xpd = NA, srt = -90
 par(fig=c(0.10,0.90,0.34,0.39), new=TRUE, mar = c(0, 0, 0, 0))
 x0 <- 1:72
 y0 <- rep(0,length(x0))
-x1 <- x0+rnorm(length(x0)) # domyslnie jakas kolumna z wartosciami dla skladowej 'u' wiatru
+x1 <- sort(x0+rnorm(length(x0))) # domyslnie jakas kolumna z wartosciami dla skladowej 'u' wiatru
 y1 <- y0+rnorm(length(x0)) # domyslnie jakas kolumna z wartosciami dla skladowej 'u' wiatru
 
 plot(1:72, DF1$ws, ylim=range(c(y0,y1)), xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0, yaxt='n', type='n')
-arrows(x0=x0, y0=y0, x1=x1, y1=y1, length = 0.05 )
+arrows(x0=x0, y0=y0, x1=x1, y1=y1, length = 0.05 ,lwd = 1.7)
 #barplot(DF1$slp, ylim=slp_range, names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0)
 box()
 
@@ -289,17 +291,12 @@ abline(h=c(0:100*20), lty=3)
 abline(v =0:72*3, col="black", lty=3)
 
 
-
-
-
-
-
 # dodanie stopki:
 #        left, right, bottom, top
 par(fig=c(0.70,0.95,0.075,1), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
-#plot(1:100)
 mtext("(c) Zakład Klimatologii UAM \nBartosz Czernecki & Mateusz Taszarek",side=1, cex=0.75, padj=2, adj = 0)
-#mtext("Bartosz Czernecki & Mateusz Taszarek", side=1,cex=0.6, padj=4)
+par(fig=c(0.05,0.35,0.075,1), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
+mtext("\nhttp://www.klimat.amu.edu.pl",side=1, cex=0.75, padj=2, adj = 0)
 
 dev.off()
 
