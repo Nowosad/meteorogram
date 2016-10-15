@@ -33,6 +33,8 @@ stats$min<- round(aggregate(temp ~ Date, DF, min)[,2],1)
 
 head(stats)
 
+
+png(filename="test", width = 630, height = 660)
 # creating layout (similarly as presented @ meteo.pl)
 #        left, right, bottom, top
 par(fig=c(0.10,0.90,0.70,0.90), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
@@ -40,7 +42,7 @@ ylim=round(c(range(c(temp,temp2))))
 ylim[1] <- ylim[1]-3
 ylim[2] <- ylim[2]+3
 
-plot(dates,temp, xaxt='n', xlab='', type='n', col='blue', lwd=3, ylim=ylim,xaxs = "i", yaxt='n')
+plot(dates,temp, xaxt='n', xlab='', type='l', col='blue', lwd=3, ylim=ylim,xaxs = "i", yaxt='n')
 
 # delimiting day and night periods and adding results as shaded polygons
 par(fig=c(0.10,0.90,0.03,0.95), new=F, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
@@ -141,3 +143,5 @@ par(fig=c(0.10,0.90,0.13,1), new=T, mar = c(0, 0, 0, 0))
 #plot(1:100)
 mtext("(c) Zakład Klimatologii UAM (2016)",side=1, cex=0.6, padj=2)
 mtext("Bartosz Czernecki & Mateusz Taszarek", side=1,cex=0.6, padj=4)
+
+dev.off()
