@@ -220,13 +220,33 @@ text(p[2]+(p[2]/72)*6, mean(p[3:4]), labels = 'kierunek', xpd = NA, srt = -90, c
 
 par(fig=c(0.10,0.90,0.21,0.33), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
 # wygenerujmy pewne ciagi danych
-niskie <- sort(round(rnorm(72,4),2))
-srednie <- sort(round(rnorm(72,3),2))
-wysokie <- sort(round(rnorm(72,2.5),2))
+niskie <- (round(rnorm(72,4),2))
+srednie <- (round(rnorm(72,3),2))
+wysokie <- (round(rnorm(72,2.5),2))
 
 plot(niskie, type='n', xaxt='n', yaxt='n', yaxs='i', xaxs='i', ylim=c(0,8))
-
 polygon(x=c(0,0,10000,10000), y = c(100,0,0,100), col="#0080FF80", border=NA)
+
+x <- 1:72
+y <- wysokie
+if(is.na(y[1])) y[1]=0
+y2 <- rep(y, each=2); y2 <- y2[-length(y2)] ; x2 <- rep(x, each=2)[-1]; x3 <- c(min(x2), x2, max(x2)) ;y3 <- c(0, y2, 0)
+polygon(x3, y3, border=NA, col="#ffffff", yaxs = "i", xaxs='i')
+
+y <- srednie
+if(is.na(y[1])) y[1]=0
+y2 <- rep(y, each=2); y2 <- y2[-length(y2)] ; x2 <- rep(x, each=2)[-1]; x3 <- c(min(x2), x2, max(x2)) ;y3 <- c(0, y2, 0)
+polygon(x3, y3, border=NA, col="#474747", yaxs = "i", xaxs='i')
+
+y <- niskie
+if(is.na(y[1])) y[1]=0
+y2 <- rep(y, each=2); y2 <- y2[-length(y2)] ; x2 <- rep(x, each=2)[-1]; x3 <- c(min(x2), x2, max(x2)) ;y3 <- c(0, y2, 0)
+polygon(x3, y3, border=NA, col="#636363", yaxs = "i", xaxs='i')
+
+lines(niskie, col="white")
+lines(srednie, col="#474747")
+lines(wysokie, col="#636363")
+
 axis(2, cex.axis=0.9, outer = F,las=1,hadj=0.3, tck=-0.04)
 axis(4, cex.axis=0.9, outer = F,las=1,hadj=1.0, tck=-0.04)
 
@@ -237,6 +257,39 @@ text(p[2]+20000, mean(p[3:4]), labels = 'Zachmurzenie (0-8)', xpd = NA, srt = -9
 
 abline(h=c(0:4*2), lty=3)
 abline(v =0:72*3, col="black", lty=3)
+##########################################
+##########################################
+
+
+
+###########################
+# chemizm
+#########################
+
+par(fig=c(0.10,0.90,0.06,0.18), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
+# wygenerujmy pewne ciagi danych
+pm10 <- round((sin(1:72*5)*15)+40)
+plot(pm10, type='n', xaxt='n', yaxt='n', yaxs='i', xaxs='i', ylim=c(0,max(pm10)+10))
+
+abline(col="green", h=25, lwd=2, lty=2)
+abline(col="red", h=50, lwd=2, lty=2)
+box()
+
+lines(pm10, lwd=1.5)
+
+axis(2, cex.axis=0.9, outer = F,las=1,hadj=0.3, tck=-0.04)
+axis(4, cex.axis=0.9, outer = F,las=1,hadj=1.0, tck=-0.04)
+
+mtext(text = "PM10 (uq/m3)", side = 2,padj = -3, cex=0.9)
+#mtext(text = "Temperatura (C)", side = 4, cex=0.8)
+p <- par('usr')
+text(p[2]+20000, mean(p[3:4]), labels = 'PM10 (uq/m3)', xpd = NA, srt = -90, cex=0.9)
+
+abline(h=c(0:100*20), lty=3)
+abline(v =0:72*3, col="black", lty=3)
+
+
+
 
 
 
