@@ -34,46 +34,55 @@ stats$min<- round(aggregate(temp ~ Date, DF, min)[,2],1)
 head(stats)
 
 
-png(filename="test", width = 630, height = 660)
+png(filename="test.png", width = 630, height = 660)
+
+##############################
+## chart no.1 starting here:
+##############################
+
 # creating layout (similarly as presented @ meteo.pl)
 #        left, right, bottom, top
-par(fig=c(0.10,0.90,0.70,0.90), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
+par(fig=c(0.10,0.90,0.79,0.91), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
 ylim=round(c(range(c(temp,temp2))))
 ylim[1] <- ylim[1]-3
 ylim[2] <- ylim[2]+3
 
 plot(dates,temp, xaxt='n', xlab='', type='l', col='blue', lwd=3, ylim=ylim,xaxs = "i", yaxt='n')
 
+daynight <- sunrise.set(52.4, 16.9, format(dates[1]-60*60*24, "%Y/%m/%d"), timezone="UTC", 5)
 # delimiting day and night periods and adding results as shaded polygons
 par(fig=c(0.10,0.90,0.03,0.95), new=F, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
 for (i in 1:4) polygon(x = c(daynight$sunset[i], daynight$sunset[i], daynight$sunrise[i+1], daynight$sunrise[i+1]),  y=c(-40,50,50,-40 ), col="#e0e0e090", border = NA)
 # col=rgb(0.1,0.1,0.1,0.15), 
 
 
-par(fig=c(0.10,0.90,0.70,0.90), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
+par(fig=c(0.10,0.90,0.79,0.91), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
 box()
-axis(2, cex.axis=0.8, outer = F,las=1,hadj=0.3, tck=-0.04)
-axis(4, cex.axis=0.8, outer = F,las=1,hadj=1.0, tck=-0.04)
+axis(2, cex.axis=0.9, outer = F,las=1,hadj=0.3, tck=-0.04)
+axis(4, cex.axis=0.9, outer = F,las=1,hadj=1.0, tck=-0.04)
 lines(dates,temp, type='l', col='red', lwd=2, yaxs = "i")
 lines(dates,DF1$td, type='l', col='blue', lwd=1, yaxs = "i")
 
-polygon(x=c(dates[1]-100000,dates[1]-100000,max(dates)+10000,max(dates)+10000), y = c(-30,0,0,-30), col="#0011FF30", border=NA)
-mtext(text = "Temperatura (C)", side = 2,padj = -3, cex=0.8)
+polygon(x=c(dates[1]-100000,dates[1]-100000,max(dates)+10000,max(dates)+10000), y = c(-30,0,0,-30), col="#0080FF80", border=NA)
+mtext(text = "Temperatura (C)", side = 2,padj = -3, cex=0.9)
 #mtext(text = "Temperatura (C)", side = 4, cex=0.8)
 p <- par('usr')
-text(p[2]+20000, mean(p[3:4]), labels = 'Temperatura (C)', xpd = NA, srt = -90, cex=0.8)
+text(p[2]+20000, mean(p[3:4]), labels = 'Temperatura (C)', xpd = NA, srt = -90, cex=0.9)
 
 abline(h=c(-20:30*5), lty=3)
-abline(v =seq(dates[1],max(dates), by="6 hour"), col="black", lty=3)
+abline(v =seq(dates[1],max(dates), by="3 hour"), col="black", lty=3)
 
-axis(3, at=seq(dates[1],max(dates), by="3 hour"), labels = format(seq(dates[1],max(dates), by="3 hour"),"%H"), padj = 1.5, cex.axis=0.75)
-axis(3, at=seq(dates[12],max(dates), by="24 hour"), labels = format(seq(dates[12],max(dates), by="24 hour"),"%a, %m-%d"), padj = 0, cex.axis=0.8,tick = FALSE)
+axis(3, at=seq(dates[1],max(dates), by="6 hour"), labels = format(seq(dates[1],max(dates), by="6 hour"),"%H"), padj = 1.3, cex.axis=1.05, tck = -0.04)
+axis(3, at=seq(dates[12],max(dates), by="24 hour"), labels = format(seq(dates[12],max(dates), by="24 hour"),"%a, %m-%d"), padj = 0, cex.axis=0.9,tick = FALSE)
 
 axis(1, at=seq(dates[12],max(dates), by="24 hour")[1:3], labels = paste("Tmax = ",format(stats[1:3,3]+0.5,digits = 2)), padj = -3, cex.axis=0.7, col.axis="red", tick = FALSE,lwd.ticks = 0,line = NA)
 axis(1, at=seq(dates[12],max(dates), by="24 hour")[1:3], labels = paste("Tmin = ",format(stats[1:3,4]-0.5,digits = 2)), padj = -2, cex.axis=0.7, col.axis="blue", tick = FALSE,lwd.ticks = 0,line = NA)
 
 
-daynight <- sunrise.set(52.4, 16.9, format(dates[1]-60*60*24, "%Y/%m/%d"), timezone="UTC", 5)
+par(fig=c(0.08,0.18,0.92,0.96), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
+mtext(paste0("wschód słońca: ", format(daynight[1,1],"%H:%M"), " UTC\nzachód słońca: ", format(daynight[1,2],"%H:%M"), " UTC"), cex = 0.9)
+
+#daynight <- sunrise.set(52.4, 16.9, format(dates[1]-60*60*24, "%Y/%m/%d"), timezone="UTC", 5)
 
 
 #par(fig=c(0.10,0.90,0.03,0.95), new=F, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
@@ -84,11 +93,14 @@ daynight <- sunrise.set(52.4, 16.9, format(dates[1]-60*60*24, "%Y/%m/%d"), timez
 
 
 
+##############################
+## chart no.2 starting here:
+##############################
 #        rysowanie wykresu nr 2
 #        left, right, bottom, top
-par(fig=c(0.10,0.90,0.50,0.67), new=TRUE, mar = c(0, 0, 0, 0))
+par(fig=c(0.10,0.90,0.66,0.78), new=TRUE, mar = c(0, 0, 0, 0))
 a <-sin(1:72)# wygenerowanie sztucznej serii
-barplot(a,add=T, xaxs='i')
+#barplot(a,add=T, xaxs='i')
 x <- dates
 y <- a
 if(is.na(y[1])) y[1]=0
@@ -100,29 +112,133 @@ x3 <- c(min(x2), x2, max(x2))
 y3 <- c(0, y2, 0)
 
 # because polygon() is dumb and wants a pre-existing plot
-plot(x, y, ylim=c(0, max(y)+1), type="n", xaxs = "i", xaxt='n',  cex.axis=0.8)
+plot(x, y, ylim=c(0, max(y)+1), type="n", xaxs = "i",yaxs = "i", xaxt='n',  cex.axis=0.8, yaxt='n')
+labs <- axis(2, cex.axis=0.9, outer = F,las=1,hadj=0.7, tck=-0.04)
+axis(4, cex.axis=0.9, outer = F,las=1,hadj=0.5, tck=-0.04)
 
 
 polygon(x3, y3, border=NA, col="#0000FF50", yaxs = "i", xaxs='i')
 lines(x2, y2)
 lines(dates,DF1$td/DF1$t2m, xaxt='n', xlab='', type='l', col='coral', lwd=2)
-abline(h=c(0,0.5,1,2,5,10), lty=3)
-abline(v =seq(dates[1],max(dates), by="6 hour"), col="black", lty=3)
+abline(h=labs, lty=3)
+abline(v =seq(dates[1],max(dates), by="3 hour"), col="black", lty=3)
+
+
+mtext(text = "Opady\n(mm/godz)", side = 2,padj = -1.5, cex=0.9)
+p <- par('usr')
+text(p[2]+20000, mean(p[3:4]), labels = 'Opady [mm/godz]', xpd = NA, srt = -90, cex=0.9)
 
 
 
-par(fig=c(0.10,0.90,0.30,0.47), new=TRUE, mar = c(0, 0, 0, 0))
+##############################
+## chart no.3 starting here:
+##############################
+
+
+par(fig=c(0.10,0.90,0.53,0.65), new=TRUE, mar = c(0, 0, 0, 0))
 slp_range <- round(range(DF1$slp))
 slp_range[1] <- slp_range[1]-6
 slp_range[2] <- slp_range[2]+6
-#barplot(DF1$slp, ylim=slp_range, col=add_slp_color(76),names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0)
-barplot(DF1$slp, ylim=slp_range, names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0)
+source("R/add_slp_color.R")
+barplot(DF1$slp, ylim=slp_range, col=add_slp_color(76),names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0, yaxt='n')
+#barplot(DF1$slp, ylim=slp_range, names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0)
 box()
+axis(2, cex.axis=0.9, outer = F,las=1,hadj=0.7, tck=-0.04)
+axis(4, cex.axis=0.9, outer = F,las=1,hadj=0.3, tck=-0.04)
 
 x_max <- length(dates)-1
-lines(x = seq(0,x_max+1, length.out=x_max+1) ,DF1$cisn_msl,lty=1,col="black",xaxs='i', lwd=3)
+lines(x = seq(0,x_max+1, length.out=x_max+1) ,DF1$slp,lty=1,col="white",xaxs='i', lwd=3)
+lines(x = seq(0,x_max+1, length.out=x_max+1) ,DF1$slp,lty=1,col="black",xaxs='i', lwd=2)
 abline(h=1:240*5, lty=3)
-abline(v =0:12*6.08, col="black", lty=3)
+abline(v =0:100*3.04, col="black", lty=3)
+
+
+#mtext(text = "Temperatura (C)", side = 4, cex=0.8)
+mtext(text = "Ciśnienie [hPa]", side = 2,padj = -4.5, cex=0.9)
+p <- par('usr')
+text(p[2]+(p[2]/72)*6, mean(p[3:4]), labels = 'Ciśnienie [hPa]', xpd = NA, srt = -90, cex=0.9)
+## end of chart no.3 (SLP)
+
+
+
+############
+# chart no.4
+############
+par(fig=c(0.10,0.90,0.40,0.52), new=TRUE, mar = c(0, 0, 0, 0))
+wind_range <- c(0, max(ceiling(range(DF1$ws, DF1$u, na.rm=T))))
+source("R/add_slp_color.R")
+barplot(DF1$ws, ylim=wind_range, names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0, yaxt='n')
+points(DF1$u , pch="-")
+#barplot(DF1$slp, ylim=slp_range, names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0)
+box()
+axis(2, cex.axis=0.9, outer = F,las=1,hadj=0.7, tck=-0.04)
+axis(4, cex.axis=0.9, outer = F,las=1,hadj=0.3, tck=-0.04)
+
+x_max <- length(dates)-1
+lines(x = seq(0,x_max+1, length.out=x_max+1) ,DF1$slp,lty=1,col="white",xaxs='i', lwd=3)
+lines(x = seq(0,x_max+1, length.out=x_max+1) ,DF1$slp,lty=1,col="black",xaxs='i', lwd=2)
+abline(h=1:240*5, lty=3)
+abline(v =0:100*3.04, col="black", lty=3)
+
+
+#mtext(text = "Temperatura (C)", side = 4, cex=0.8)
+mtext(text = "Wiatr [m/s]", side = 2,padj = -4.5, cex=0.9)
+p <- par('usr')
+text(p[2]+(p[2]/72)*6, mean(p[3:4]), labels = 'Wiatr [m/s]', xpd = NA, srt = -90, cex=0.9)
+## end of chart no.4 (Wind speed)
+
+
+
+############
+# chart no.5 -> wind barbs
+############
+par(fig=c(0.10,0.90,0.34,0.39), new=TRUE, mar = c(0, 0, 0, 0))
+x0 <- 1:72
+y0 <- rep(0,length(x0))
+x1 <- x0+rnorm(length(x0)) # domyslnie jakas kolumna z wartosciami dla skladowej 'u' wiatru
+y1 <- y0+rnorm(length(x0)) # domyslnie jakas kolumna z wartosciami dla skladowej 'u' wiatru
+
+plot(1:72, DF1$ws, ylim=range(c(y0,y1)), xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0, yaxt='n', type='n')
+arrows(x0=x0, y0=y0, x1=x1, y1=y1, length = 0.05 )
+#barplot(DF1$slp, ylim=slp_range, names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0)
+box()
+
+abline(v =0:100*3.04, col="black", lty=3)
+
+mtext(text = "kierunek", side = 2,padj = -4.5, cex=0.9)
+p <- par('usr')
+text(p[2]+(p[2]/72)*6, mean(p[3:4]), labels = 'kierunek', xpd = NA, srt = -90, cex=0.9)
+## end of chart no.5 (Wind direction)
+
+
+
+
+
+###########################
+# zachmurzenie
+#########################
+
+par(fig=c(0.10,0.90,0.19,0.31), new=T, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
+# wygenerujmy pewne ciagi danych
+niskie <- sort(round(rnorm(72,4),2))
+srednie <- sort(round(rnorm(72,3),2))
+wysokie <- sort(round(rnorm(72,2.5),2))
+
+plot(niskie, type='n', xaxt='n', yaxt='n', yaxs='i', xaxs='i', ylim=c(0,8))
+
+polygon(x=c(0,0,10000,10000), y = c(100,0,0,100), col="#0080FF80", border=NA)
+axis(2, cex.axis=0.9, outer = F,las=1,hadj=0.3, tck=-0.04)
+axis(4, cex.axis=0.9, outer = F,las=1,hadj=1.0, tck=-0.04)
+
+mtext(text = "Zachmurzenie (0-8)", side = 2,padj = -3, cex=0.9)
+#mtext(text = "Temperatura (C)", side = 4, cex=0.8)
+p <- par('usr')
+text(p[2]+20000, mean(p[3:4]), labels = 'Zachmurzenie (0-8)', xpd = NA, srt = -90, cex=0.9)
+
+abline(h=c(0:4*2), lty=3)
+abline(v =0:72*3, col="black", lty=3)
+
+
 
 
 # creating layout (similarly as presented @ meteo.pl) <- testing approach
@@ -145,3 +261,6 @@ mtext("(c) Zakład Klimatologii UAM (2016)",side=1, cex=0.6, padj=2)
 mtext("Bartosz Czernecki & Mateusz Taszarek", side=1,cex=0.6, padj=4)
 
 dev.off()
+
+system(command = "convert test.png ICM.png +append wyjscie.png")
+system(command = "eog wyjscie.png")
