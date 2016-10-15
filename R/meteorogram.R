@@ -1,6 +1,6 @@
 library(StreamMetabolism)
 library(plyr)
-
+setwd("/home/bartosz/bitbucket/meteorogram/R")
 # read sample WRF dataset
 # need to be fixed in future for reading raw grib/netcdf files; by now it is done seperately...
 dataset <- read.csv("http://openmeteo.pl/meta/wrf/poznan.txt", sep=";", header=F,na.strings=c("-999000000.000 ","  Entire grid contents are set to missing data "))
@@ -34,7 +34,7 @@ stats$min<- round(aggregate(temp ~ Date, DF, min)[,2],1)
 head(stats)
 
 
-png(filename="test.png", width = 630, height = 660)
+png(filename="../test.png", width = 630, height = 660)
 
 ##############################
 ## chart no.1 starting here:
@@ -52,7 +52,7 @@ plot(dates,temp, xaxt='n', xlab='', type='l', col='blue', lwd=3, ylim=ylim,xaxs 
 daynight <- sunrise.set(52.4, 16.9, format(dates[1]-60*60*24, "%Y/%m/%d"), timezone="UTC", 5)
 # delimiting day and night periods and adding results as shaded polygons
 par(fig=c(0.10,0.90,0.03,0.95), new=F, mar = c(0, 0, 0, 0), oma=c(0,0,0,0))
-for (i in 1:4) polygon(x = c(daynight$sunset[i], daynight$sunset[i], daynight$sunrise[i+1], daynight$sunrise[i+1]),  y=c(-40,50,50,-40 ), col="#e0e0e090", border = NA)
+for (i in 1:4) polygon(x = c(daynight$sunset[i], daynight$sunset[i], daynight$sunrise[i+1], daynight$sunrise[i+1]),  y=c(-40,50,50,-40 ), col="#e0e0e0", border = NA)
 # col=rgb(0.1,0.1,0.1,0.15), 
 
 
@@ -141,7 +141,7 @@ par(fig=c(0.10,0.90,0.53,0.65), new=TRUE, mar = c(0, 0, 0, 0))
 slp_range <- round(range(DF1$slp))
 slp_range[1] <- slp_range[1]-6
 slp_range[2] <- slp_range[2]+6
-source("R/add_slp_color.R")
+source("add_slp_color.R")
 barplot(DF1$slp, ylim=slp_range, col=add_slp_color(76),names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0, yaxt='n')
 #barplot(DF1$slp, ylim=slp_range, names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0)
 box()
@@ -168,7 +168,7 @@ text(p[2]+(p[2]/72)*6, mean(p[3:4]), labels = 'Ciśnienie [hPa]', xpd = NA, srt 
 ############
 par(fig=c(0.10,0.90,0.40,0.52), new=TRUE, mar = c(0, 0, 0, 0))
 wind_range <- c(0, max(ceiling(range(DF1$ws, DF1$u, na.rm=T))))
-source("R/add_slp_color.R")
+source("add_slp_color.R")
 barplot(DF1$ws, ylim=wind_range, names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0, yaxt='n')
 points(DF1$u , pch="-")
 #barplot(DF1$slp, ylim=slp_range, names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0)
@@ -300,5 +300,5 @@ mtext("\nhttp://www.klimat.amu.edu.pl",side=1, cex=0.75, padj=2, adj = 0)
 
 dev.off()
 
-system(command = "convert test.png ICM.png +append wyjscie.png")
-system(command = "eog wyjscie.png")
+system(command = "convert ../test.png ../ICM.png +append ../wyjscie.png")
+system(command = "eog ../wyjscie.png")
