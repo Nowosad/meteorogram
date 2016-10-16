@@ -1,4 +1,5 @@
 # run entire procedure:
+
 setwd("/home/bartosz/github/meteorogram/")
 source("R/read_gfs_from_file.R")
 source("R/add_slp_color.R")
@@ -16,4 +17,5 @@ for (lon1 in seq(from=14,to=25,by=0.25)){
 }
 
 system(command = "ls *png | wc", intern = T)
-#system(command = "mv *png ../")
+system(command = "scp /home/bartosz/github/meteorogram/*png bartosz@openmeteo.pl:/var/www/meteorogram/")
+system(command = "rm *png")

@@ -133,7 +133,7 @@ par(fig=c(0.10,0.90,0.53,0.65), new=TRUE, mar = c(0, 0, 0, 0))
 slp_range <- round(range(DF1$PRMSL))
 slp_range[1] <- slp_range[1]-4
 slp_range[2] <- slp_range[2]+4
-barplot(DF1$PRMSL, ylim=slp_range, col=add_slp_color(76),names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0, yaxt='n')
+barplot(DF1$PRMSL, ylim=slp_range, col=add_slp_color(76,DF1),names.arg = dates, xaxt='n', yaxs='i',xaxs='i', border=NA, cex.axis=0.8,space = 0.0, yaxt='n')
 box()
 axis(2, cex.axis=0.9, outer = F,las=1,hadj=0.7, tck=-0.04)
 axis(4, cex.axis=0.9, outer = F,las=1,hadj=0.3, tck=-0.04)
@@ -145,7 +145,7 @@ abline(h=1:240*5, lty=3)
 abline(v =0:100*3.04, col="black", lty=3)
 
 mtext(text = "Ciśnienie [hPa]", side = 2,padj = -4.5, cex=0.9)
-p <- par('usr')
+#p <- par('usr')
 #text(p[2]+(p[2]/len)*6, mean(p[3:4]), labels = 'Ciśnienie [hPa]', xpd = NA, srt = -90, cex=0.9)
 ## end of chart no.3 (SLP)
 
